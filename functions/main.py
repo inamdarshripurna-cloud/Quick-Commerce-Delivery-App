@@ -1,7 +1,6 @@
 import json
 import uuid
 from datetime import datetime
-from os import path
 from firebase_functions import https_fn, options
 from firebase_admin import firestore, initialize_app, storage
 from werkzeug.utils import secure_filename
@@ -35,7 +34,9 @@ def json_response(data, status=200):
     return https_fn.Response(
         json.dumps(data, default=serializer),
         status=status,
-        headers={"Content-Type": "application/json"}
+        headers={
+            "Content-Type": "application/json"
+        }
     )
 
 # ===================== FUNCTION OPTIONS =====================
@@ -52,7 +53,7 @@ def shri_api(req: https_fn.Request) -> https_fn.Response:
     db = get_db()
 
     if req.method == "OPTIONS":
-        return json_response({}, 204)
+        return https_fn.Response("", status=204)
 
     path = req.path.strip("/")
     method = req.method
